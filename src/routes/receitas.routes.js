@@ -11,4 +11,6 @@ receitasRouter.post("/receitas", validateSchema(receitaSchema), createReceita)
 receitasRouter.delete("/receitas/:id", deleteReceita)
 receitasRouter.put("/receitas/:id", validateSchema(receitaSchema), editReceitaById)
 
+
+
 export default receitasRouter

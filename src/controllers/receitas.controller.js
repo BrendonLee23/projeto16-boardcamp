@@ -31,3 +31,4 @@ export async function deleteReceita(req, res) {
 export async function editReceitaById(req, res) {
     res.send("editReceitaById")
 }
+
