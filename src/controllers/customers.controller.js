@@ -1,5 +1,6 @@
 import { db } from "../database/database.connection.js";
 
+
 export async function getCustomers(req, res) {
     try {
         const customers = await db.query(`SELECT * FROM customers;`)
@@ -18,7 +19,6 @@ export async function getCustomersById(req, res) {
         res.status(500).send(err.message)
     }
 }
-
 
 export async function postCustomers(req, res) {
     const {name, phone, cpf, birthday} = req.body;
