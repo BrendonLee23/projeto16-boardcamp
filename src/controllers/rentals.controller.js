@@ -36,7 +36,8 @@ export async function postRentals(req, res) {
             return res.status(500).send('Game pricePerDay is missing or invalid');
         }
         const gameStock = await db.query(`SELECT * FROM rentals WHERE "gameId"=$1`, [gameId]);
-        if(gameStock.rows.length >= game.stockTotal) {
+        console.log(gameStock.rows.length)
+        if(gameStock.rows.length >= game.rows[0].stockTotal) {
             return res.sendStatus(400)
         }
         const rentDate = new Date();
