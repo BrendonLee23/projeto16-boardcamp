@@ -8,7 +8,7 @@ const rentalsRouter = Router();
 
 rentalsRouter.get("/rentals", getRentals);
 rentalsRouter.post("/rentals", validateRentals(rentalsSchema), postRentals);
-rentalsRouter.post("/rentals/:id", finalizeRentals);
+rentalsRouter.post("/rentals/:id/return", finalizeRentals);
 rentalsRouter.delete("/rentals/:id", deleteRentals);
 
 export default rentalsRouter;
