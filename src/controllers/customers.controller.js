@@ -42,7 +42,7 @@ export async function editCustomers(req, res) {
 
     try{
         const cpfJaExiste = await db.query(`SELECT FROM customers WHERE cpf = $1`, [cpf])
-        if(cpfJaExiste.rows.length>0){
+        if(cpfJaExiste){
             return res.status(409).send("Erro ao Cadastrar. CPF já cadastado")
         }
         await db.query(`UPDATE customers SET name='${name}', phone='${phone}', cpf='${cpf}', birthday='${birthday}' WHERE id=$1;`, [id]);
