@@ -13,7 +13,8 @@ export async function getCustomers(req, res) {
 export async function getCustomersById(req, res) {
     const {id} = req.params
     try {
-        const customers = await db.query(`SELECT name, phone, cpf, to_char(birthday, 'YYYY-MM-DD') as birthday FROM customers WHERE id=${id};`)
+        const customers = await db.query(`SELECT id, name, phone, cpf, to_char(birthday, 'YYYY-MM-DD') as birthday FROM customers WHERE id=${id};`)
+        if(!customers.rows[0]) return res.sendStatus(404);
         res.send(customers.rows)
     } catch (err) {
         res.status(500).send(err.message)
