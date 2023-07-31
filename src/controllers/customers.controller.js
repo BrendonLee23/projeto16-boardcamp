@@ -24,15 +24,13 @@ export async function postCustomers(req, res) {
     const {name, phone, cpf, birthday} = req.body;
 
     try {
-        const customer = await db.query(`INSERT INTO customers (name, phone, cpf, birthday) VALUES ($1, $2, $3, $4)`,  [name, phone, cpf, birthday]);
-        if(customer.rows.length > 0){
-            return res.status(409).send("Erro ao Cadastrar. O cliente já existe");
+        const cpfJaExiste = await db.query(`SELECT FROM games WHERE cpf = $3`, [cpf])
+        if(cpfJaExiste.rows.length>0){
+            return res.status(409).send("Erro ao Cadastrar. O CPF já existe")
         }
-        const verificarCpf = customer.find((c) => c.cpf == cpf);
-        if(verificarCpf){
-            if(verificarCpf.id != id){
-                return res.status(409).send("Cpf já cadastrado em outro cliente");
-            }
+        const customer = await db.query(`INSERT INTO customers (name, phone, cpf, birthday) VALUES ($1, $2, $3, $4)`,  [name, phone, cpf, birthday]);
+        if(!customer){
+            return res.sendStatus(400);
         }
         res.sendStatus(201)
     } catch (err) {
