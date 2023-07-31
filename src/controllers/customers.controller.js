@@ -24,7 +24,7 @@ export async function postCustomers(req, res) {
     const {name, phone, cpf, birthday} = req.body;
 
     try {
-        const cpfJaExiste = await db.query(`SELECT FROM games WHERE cpf = $1`, [cpf])
+        const cpfJaExiste = await db.query(`SELECT FROM customers WHERE cpf = $1`, [cpf])
         if(cpfJaExiste.rows.length>0){
             return res.status(409).send("Erro ao Cadastrar. CPF já cadastado")
         }
