@@ -3,7 +3,7 @@ import { db } from "../database/database.connection.js";
 
 export async function getCustomers(req, res) {
     try {
-        const customers = await db.query(`SELECT * FROM customers;`)
+        const customers = await db.query(`SELECT name, phone, cpf, to_char(birthday, 'YYYY-MM-DD') as birthday FROM customers;`)
         res.send(customers.rows)
     } catch (err) {
         res.status(500).send(err.message)
@@ -13,7 +13,7 @@ export async function getCustomers(req, res) {
 export async function getCustomersById(req, res) {
     const {id} = req.params
     try {
-        const customers = await db.query(`SELECT * FROM customers WHERE id=${id};`)
+        const customers = await db.query(`SELECT name, phone, cpf, to_char(birthday, 'YYYY-MM-DD') as birthday FROM customers WHERE id=${id};`)
         res.send(customers.rows)
     } catch (err) {
         res.status(500).send(err.message)
