@@ -2,6 +2,11 @@ import { db } from "../database/database.connection.js"
 
 export async function getRentals(req, res) {
     try {
+        const rentals = await db.query(`
+            SELECT rentals.*, customers.name as customer, 
+            games.name as game FROM rentals JOIN customers ON 
+            rentals."customerId" = customers.id JOIN games ON rentals."gameId"=games.id;
+        `);
         
     } catch (err) {
         res.status(500).send(err.message)
