@@ -29,13 +29,16 @@ export async function postRentals(req, res) {
         const game = await db.query(`SELECT * FROM games WHERE id=$1`, [gameId]);
 
         if (game.rows.length === 0) {
-            return res.status(404).send('Game not found');
+            return res.status(404).send('Game não encontrado!');
         }
 
         if (!game.rows[0].pricePerDay) {
             return res.status(500).send('Game pricePerDay is missing or invalid');
         }
-
+        const gameStock = await db.query(`SELECT * FROM rentals WHERE gameId=$1`, [gameId]);
+        if(gameStock.rows.length >= game.stockTotal) {
+            return res.sendStatus(400)
+        }
         const rentDate = new Date();
         const originalPrice = daysRented * game.rows[0].pricePerDay;
         await db.query(`
