@@ -30,3 +30,14 @@ export async function postCustomers(req, res) {
         res.status(500).send(err.message)
     }
 }
+
+export async function editCustomers(req, res) {
+    const {name, phone, cpf, birthday} = req.body;
+
+    try {
+        const customers = await db.query(`UPDATE customers SET ${name, phone, cpf, birthday}) WHERE name = ${name}`);
+        res.sendStatus(201)
+    } catch (err) {
+        res.status(500).send(err.message)
+    }
+}
