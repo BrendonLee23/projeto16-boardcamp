@@ -57,7 +57,7 @@ export async function finalizeRentals(req, res) {
 
         
         const rental = await db.query(`SELECT * FROM rentals WHERE id=$1`, [id]);
-        const game = await db.query(`SELECT * FROM games WHERE id=$2`, [rental.rows[0].gameId])
+        const game = await db.query(`SELECT * FROM games WHERE id=$1`, [rental.rows[0].gameId])
         if (!rental.rows[0]) return res.sendStatus(404);
         if (rental.rows[0].returnDate) return res.sendStatus(400);
         const returnDate = new Date();
