@@ -28,6 +28,12 @@ export async function postCustomers(req, res) {
         if(customer.rows.length > 0){
             return res.status(409).send("Erro ao Cadastrar. O cliente já existe");
         }
+        const verificarCpf = customer.find((c) => c.cpf == cpf);
+        if(verificarCpf){
+            if(verificarCpf.id != id){
+                return res.status(409).send("Cpf já cadastrado em outro cliente");
+            }
+        }
         res.sendStatus(201)
     } catch (err) {
         res.status(500).send(err.message)
