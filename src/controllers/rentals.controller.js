@@ -54,14 +54,17 @@ export async function postRentals(req, res) {
 export async function finalizeRentals(req, res) {
     const {id} = req.params;
     try {
+
+        
         const rental = await db.query(`SELECT * FROM rentals WHERE id=$1`, [id]);
+        const game = await db.query(`SELECT * FROM game WHERE id=$2`, [rental.rows[0].gameId])
         if (!rental.rows[0]) return res.sendStatus(404);
         if (rental.rows[0].returnDate) return res.sendStatus(400);
         const returnDate = new Date();
         let late =  Math.floor(Math.abs(returnDate - rental.rows[0].rentDate)/(24 * 60 * 60 * 1000));
         let delayFee = 0;
         if (late - rental.rows[0].daysRented > 0){
-            delayFee = (late - rental.rows[0].daysRented)*rental.rows[0].originalPrice;
+            delayFee = (late - rental.rows[0].daysRented)*game.rows[0].pricePerDay;
         }
         await db.query(`UPDATE rentals SET "returnDate"=$1, "delayFee"=$2 WHERE id=$3`, [returnDate,delayFee,id]);
         res.sendStatus(200);
@@ -74,6 +77,9 @@ export async function deleteRentals(req, res) {
     try {
         console.log(res.locals);
         await db.query(`DELETE FROM rentals WHERE id=$1`, [id]);
+        const rental = await db.query(`SELECT * FROM rentals WHERE id=$1`, [id]);
+        if (!rental.rows[0]) return res.sendStatus(404);
+        if (rental.rows[0].returnDate === null) return res.sendStatus(400);
         res.sendStatus(200);
     } catch (error) {
         res.status(500).send(error.message);
