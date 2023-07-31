@@ -27,6 +27,15 @@ export async function postRentals(req, res) {
     if (daysRented <= 0) return res.status(400).send('daysRented deve ser maior que zero!');
     try {
         const game = await db.query(`SELECT * FROM games WHERE id=$1`, [gameId]);
+
+        if (game.rows.length === 0) {
+            return res.status(404).send('Game not found');
+        }
+
+        if (!game.rows[0].pricePerDay) {
+            return res.status(500).send('Game pricePerDay is missing or invalid');
+        }
+
         const rentDate = new Date();
         const originalPrice = daysRented * game.rows[0].pricePerDay;
         await db.query(`
@@ -56,7 +65,7 @@ export async function finalizeRentals(req, res) {
         res.status(500).send(err.message)
     }
 }
-export async function deleteRental(req, res) {
+export async function deleteRentals(req, res) {
     const { id } = req.params;
     try {
         console.log(res.locals);
